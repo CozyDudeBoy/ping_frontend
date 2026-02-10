@@ -1,0 +1,594 @@
+/* detail.scss */
+@use '../../styles/base.scss' as *;
+
+
+
+//detail 카드 형식 
+.card-box {
+  border: 1px solid $main_gray_400;
+  border-radius: 12px;
+  padding: 16px 30px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+}
+
+//detail 모바일 모달 버튼
+.mobile-comment-btn {
+  @include btn($size: "lg",
+    $type: "primary",
+  );
+  border: none;
+  display: none;
+}
+
+//모바일 / 테블릿 모달  (공통)
+.modal-dim {
+  display: none; // 기본은 숨김
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-dim.is-open {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-wrapper {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 100%;
+  // padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.detail-modal {
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  transform: translateY(100%);
+  transition: transform 0.35s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-dim.is-open .detail-modal {
+  transform: translateY(0);
+}
+
+.close_btn {
+  position: absolute;
+  top: 30px;
+  right: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+//PinEditor에서 받을 이미지 위에 핀 마크들
+.image_wrap {
+  position: relative;
+  width: 100%;
+}
+
+.image_wrap img {
+  width: 100%;
+  display: block;
+}
+
+.pin_marker {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: $primary_pink;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  cursor: pointer;
+  animation: pulse 1.5s infinite;
+}
+
+
+//기본 detail.scss 서식
+.detail {
+
+  .detail-box_left {
+    position: relative;
+    margin: 70px 0px;
+    border: 1px solid $main_gray_300;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+
+    .left-inner {
+      padding: 20px 30px;
+    }
+
+
+    .back_btn {
+      @include btn("sm", "custome");
+      @include sns-shadow;
+      border: 1px solid $main_gray_400;
+      transition: 0.3s;
+      color: $main_gray_600;
+      background-color: $main-white;
+      width: 120px;
+
+      img {
+        width: 20px;
+        transform: translate(-2px, 3px);
+      }
+    }
+
+    h2 {
+      @include typo("displayMd", $bold);
+      color: $main_gray_900;
+      padding: 10px 0px;
+      text-align: left
+    }
+
+    p {
+      @include typo("headingSm", $regular);
+      color: $main_gray_600;
+      // padding-bottom: 20px;
+    }
+
+    .user-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      font-size: 16px;
+      color: $main_gray_600;
+
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: block;
+      }
+    }
+
+    .desc-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+
+
+    }
+
+    .badge-btn {
+      display: flex;
+      gap: 10px;
+
+      >li {
+        @include btn("sm", "custome");
+        @include sns-shadow;
+        border: none;
+        transition: 0.3s;
+        background: $bg-p;
+      }
+    }
+
+    .img_box {
+      padding: 30px 0px;
+
+      img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+    }
+
+  }
+
+  .detail-box_right {
+    margin: 70px 0px;
+    padding: 50px 24px;
+    border: 1px solid $main_gray_300;
+    border-radius: 16px;
+
+
+    //구분선 색 서식
+    hr {
+      border: none;
+      border-top: 1px solid $main_gray_300;
+      margin: 24px 0;
+    }
+
+    .sticky-inner {
+      position: sticky;
+      top: 70px;
+
+      .inner-top {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .pin-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        @include typo("headingSm", $bold);
+        color: $main_gray_500;
+
+        .pin-badge {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: $primary_pink;
+          color: #fff;
+          font-size: 13px;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          pointer-events: auto;
+          cursor: pointer;
+          animation: pulse 1.5s infinite;
+        }
+      }
+
+      .selected-pin_qna {
+        @include typo("headingSm", $bold);
+        color: $main_gray_700
+      }
+
+      .box-right_card {
+        width: 100%;
+
+        ul {
+          width: 100%;
+
+          li:first-child {
+            @include typo("bodytextLg", $regular);
+            color: $main_gray_600;
+            margin-bottom: 30px;
+          }
+
+          li:not(:first-child) {
+            @extend .card-box;
+            @include typo("bodytextMd", $regular);
+            color: $main_gray_800;
+
+            span {
+              font-size: 10px;
+            }
+          }
+        }
+
+        textarea {
+          width: 100%;
+          min-height: 120px;
+
+          font-family: inherit;
+          @include typo("bodytextMd", $regular);
+          line-height: 1.6;
+
+          resize: none;
+          outline: none;
+          background: transparent;
+
+          border: 1px solid $main_gray_400;
+        }
+
+        button {
+          @include btn($type: "fixed",
+            $shadow: true,
+          );
+          @include sns-shadow;
+          background-color: $primary_pink;
+          width: 100%;
+          height: 60px;
+          border-radius: 12px;
+          //border: 1px solid $main-white;
+
+          @include typo("bodytextXl", $bold);
+        }
+
+      }
+
+      .box-right_memo {
+        padding: 0px 10px;
+
+        p {
+          @include typo("bodytextLg", $regular);
+          color: $main_gray_400;
+        }
+
+        // ul {
+        //   li {
+        //     @extend .card-box;
+        //     @include typo("bodytextMd", $regular);
+        //     color: $main_gray_800;
+
+        //     span {
+        //       font-size: 13px;
+        //     }
+        //   }
+        // }
+
+        textarea {
+          margin-top: 30px;
+          width: 100%;
+          min-height: 120px;
+
+          font-family: inherit;
+          @include typo("bodytextMd", $regular);
+          line-height: 1.6;
+
+          resize: none;
+          outline: none;
+          background: transparent;
+
+          border: 1px solid $main_gray_300;
+
+          &::placeholder {
+            color: $main_gray_300;
+          }
+        }
+
+        button {
+          @include btn($type: "fixed",
+            $shadow: true,
+            $hover: false);
+
+          @include sns-shadow;
+          background-color: #fdb7bd;
+          width: 100%;
+          height: 60px;
+          border-radius: 12px;
+
+          @include typo("bodytextXl", $bold);
+        }
+
+      }
+    }
+  }
+}
+
+//반응형 detail.scss 서식  
+/* 1920+ (PC) */
+@media screen and (min-width: 1920px) {
+  .detail {
+    .detail_box {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      column-gap: 36px;
+    }
+
+    .detail-box_left {
+      grid-column: span 8;
+    }
+
+    .detail-box_right {
+      grid-column: span 4;
+    }
+  }
+}
+
+/* 1440 ~ 1919 (Desktop) */
+@media screen and (min-width: 1440px) and (max-width: 1919px) {
+  .detail {
+    .detail_box {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      column-gap: 32px;
+    }
+
+    .detail-box_left {
+      grid-column: span 6;
+    }
+
+    .detail-box_right {
+      grid-column: span 4;
+    }
+  }
+}
+
+/* 1024 ~ 1439 — Tablet Landscape / Small Laptop */
+@media screen and (min-width: 1024px) and (max-width: 1439px) {
+  .detail {
+    .detail_box {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      column-gap: 24px;
+    }
+
+    .detail-box_left {
+      grid-column: span 5;
+    }
+
+    .detail-box_right {
+      grid-column: span 3;
+    }
+  }
+}
+
+/* 768 ~ 1023px (TABLET) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .detail {
+    max-width: 768px;
+    padding: 0 16px;
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      column-gap: 20px;
+    }
+
+    .detail-box_left {
+      margin: 20px 0px;
+      padding: 0px 0px;
+      border: none;
+      grid-column: 1 / -1;
+
+      h2 {
+        @include typo("displayMd", $bold);
+      }
+
+      p {
+        @include typo("bodytextXl", $regular);
+        // color: $main_gray_600;
+        // padding-bottom: 20px;
+      }
+
+      .desc-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+
+        .user-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 6px 12px;
+          font-size: 14px;
+          color: $main_gray_600;
+
+          img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+          }
+        }
+      }
+    }
+
+    .detail-box_right {
+      border: none;
+      margin: 0px;
+      grid-column: 1 / -1;
+    }
+
+    .modal-dim {
+      display: block;
+    }
+
+    .modal-dim.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .mobile-comment-btn {
+      display: block;
+      @include btn('md'
+      );
+      @include sns-shadow;
+      background-color: $primary_pink;
+      width: 100%;
+    }
+
+    .detail-box_right.hidden {
+      display: none;
+    }
+  }
+}
+
+/* 0 ~ 767px (MOBILE) */
+@media screen and (max-width: 767px) {
+  .detail {
+    max-width: 390px;
+    padding: 0 16px;
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      column-gap: 20px;
+    }
+
+    .detail-box_left {
+      margin: 20px 0px;
+      padding: 0px 0px;
+      border: none;
+      grid-column: 1 / -1;
+
+      .back_btn {
+        display: none;
+      }
+
+      .left-inner {
+        padding: 0px;
+      }
+
+      h2 {
+        @include typo("displaySm", $bold);
+
+      }
+
+      p {
+        @include typo("bodytextXl", $regular);
+      }
+
+      .desc-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+
+        .user-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 6px 12px;
+          font-size: 14px;
+          color: $main_gray_600;
+
+          img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+          }
+        }
+      }
+    }
+
+    .detail-box_right {
+      border: none;
+      grid-column: 1 / -1;
+      margin: 0px;
+    }
+
+    .modal-dim {
+      display: block;
+    }
+
+    .modal-dim.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .mobile-comment-btn {
+      display: block;
+      @include btn('sm'
+      );
+      @include sns-shadow;
+      background-color: $primary_pink;
+      width: 100%;
+    }
+
+    .detail-box_right.hidden {
+      display: none;
+    }
+  }
+}

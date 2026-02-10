@@ -1,0 +1,277 @@
+// 질문과 답변 scss
+@use '../../styles/base.scss' as *;
+
+//질문과 답변 Question scss
+.qna {
+  section {
+    padding: 80px 0;
+
+    h2{
+      color:$main_gray_800;
+    }
+    .qna-form_btn {
+      grid-column: 1/ -1;
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+
+      a {
+        @include btn("md",
+          "primary",
+          true,
+          $main-white,
+          $main_gray_600,
+          $hover: false);
+      }
+    }
+
+    .qna-table-wrap {
+      margin-top: 30px;
+      grid-column: 1 / -1;
+      border-radius: 12px;
+      background: $main_gray_100;
+      box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.15);
+
+      .qna-table {
+        width: 100%;
+        border-collapse: collapse;
+
+        thead {
+          th {
+            padding: 20px 0;
+            border-bottom: 1px solid $main_gray_300;
+            font-weight: $bold;
+            color: $main_gray_700;
+          }
+        }
+
+        tbody {
+          color:$main_gray_500;
+          /* =====================
+            질문 행
+          ===================== */
+          .qna-row {
+            cursor: pointer;
+            line-height: 32px;
+
+            &:hover {
+              background: rgba($primary_blue, 0.05);
+            }
+
+            td:first-child {
+              padding-top: 10px;
+            }
+
+            td:not(:nth-child(2)) {
+              text-align: center;
+            }
+
+            td:nth-child(2) {
+              padding-left: 30px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              padding-right: 20px;
+            }
+
+            .arrow {
+              font-size: 12px;
+              display: inline-flex; // 기준 안정화
+              align-items: center;
+              justify-content: center;
+
+              transform-origin: 50% 50%;
+              transition: transform 0.3s ease;
+            }
+
+            &.open {
+              .arrow {
+                transform: rotate(180deg);
+              }
+            }
+          }
+
+          /* =====================
+             답변 행
+          ===================== */
+          .qna-answer-row {
+            td {
+              padding: 0;
+              border: none;
+            }
+
+            .qna-answer {
+              overflow: hidden;
+              max-height: 0;
+              overflow: hidden;
+              padding: 0 30px;
+              background: $primary_blue;
+              color: $main-white;
+              border-radius: 12px;
+              line-height: 1.6;
+              transition:
+                max-height 0.35s ease,
+
+            }
+
+            &.open {
+              .qna-answer {
+                opacity: 1;
+              }
+            }
+
+            .qna-answer-inner {
+              padding: 30px;
+            }
+          }
+        }
+      }
+
+      /* =====================
+        더보기 버튼
+      ===================== */
+
+      .btn_more {
+        width: 100%;
+
+        @include btn("sm",
+          "primary",
+          true,
+          $primary_blue,
+          $main-white,
+          $hover: false);
+        border: none;
+      }
+
+    }
+  }
+}
+
+
+
+//질문하기 QuestionFrom scss
+.qna-form {
+  .grid {
+    padding: 120px 0;
+
+    h2 {
+      padding: 50px;
+      @include typo("displaySm", $bold);
+      color: $primary_mint;
+      text-align: center;
+    }
+
+    .qna-form_box {
+      display: flex;
+      flex-direction: column;
+    }
+
+    button[type="submit"] {
+      @include btn(md, "fixed");
+      border: none;
+      width: 100%;
+      margin: 40px 0;
+    }
+  }
+}
+
+/* ===== 공통 입력 스타일 (login/signup과 동일) ===== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+
+  label {
+    @include typo("headingSm", $regular);
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+    border: none;
+    border-radius: 10px;
+    font-family: inherit;
+    @include typo("headingSm", $regular);
+    @include neumorphism-shadow;
+
+    &::placeholder {
+      color: $main_gray_400;
+    }
+  }
+
+  textarea {
+    min-height: 120px;
+    resize: none;
+    line-height: 1.6;
+  }
+}
+
+/* ===== divider (signup과 동일) ===== */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  span {
+    white-space: nowrap;
+    @include typo("headingSm", $regular);
+    color: $main_gray_800;
+  }
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: $main_gray_800;
+  }
+}
+
+/* ===== 반응형 grid (auth와 동일 패턴) ===== */
+@media screen and (min-width: 1440px) {
+  .qna-form .grid .col-4 {
+    grid-column: 5 / span 4;
+  }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1439px) {
+  .qna-form .grid .col-4 {
+    grid-column: 4 / span 6;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .qna-form .grid .col-4 {
+    grid-column: 2 / span 6;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .qna-form .grid {
+    padding: 40px 0;
+
+    h2 {
+      padding: 30px 0;
+    }
+
+    .form-group {
+      label {
+        @include typo("bodytextLg", $regular);
+      }
+
+      input,
+      textarea {
+        padding: 12px;
+        @include typo("bodytextLg", $regular);
+      }
+    }
+
+    button[type="submit"] {
+      @include btn(md, "fixedMo");
+      width: 100%;
+    }
+  }
+}

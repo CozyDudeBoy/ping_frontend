@@ -1,0 +1,164 @@
+// 아카이브 scss
+@use '../../styles/base.scss' as *;
+
+/* archive.scss */
+header.guest+.archive section .top-text {
+  padding-top: 80px;
+}
+
+.archive {
+  section {
+    padding: 80px 0;
+
+    .top-text {
+      //padding-top: 100px;
+    }
+
+    .filters {
+      padding: 20px 0;
+      grid-column: 1 / -1;
+
+      span {
+        display: block;
+        margin: 10px 10px;
+        @include typo("headingMd", $medium);
+        color: $main_gray_600;
+      }
+
+      .archive-navi {
+        padding: 0px 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        li {
+          list-style: none;
+          margin: 10px 0;
+        }
+
+        button {
+          @include btn("sm", "custome");
+          @include sns-shadow;
+          border: none;
+          transition: 0.3s;
+
+          &:hover {
+            background-color: $bg-b;
+          }
+
+          &.active {
+            background: $primary_blue;
+            color: $main-white;
+          }
+        }
+      }
+    }
+
+    .main_recent-archives {
+      grid-column: 1 / -1;
+
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 36px;
+        padding-top: 20px;
+        width: 100%;
+
+        grid-auto-columns: minmax(0, 1fr);
+
+      }
+
+      .gallery-grid>* {
+        min-width: 0;
+      }
+    }
+  }
+}
+
+/* 1440 ~ 1919 (Desktop) */
+@media screen and (min-width: 1440px) and (max-width: 1919px) {
+  .archive {
+    section {
+      .main_recent-archives {
+        .gallery-grid {
+          grid-template-columns: repeat(5, 1fr);
+          gap: 32px;
+        }
+      }
+    }
+  }
+}
+
+/* 1024 ~ 1439 — Tablet Landscape / Small Laptop */
+@media screen and (min-width: 1024px) and (max-width: 1439px) {
+  .archive {
+    section {
+      .main_recent-archives {
+        .gallery-grid {
+          grid-template-columns: repeat(4, 1fr);
+          gap: 24px;
+        }
+      }
+    }
+  }
+}
+
+/* 768 ~ 1023px (TABLET) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .archive {
+    section {
+      .main_recent-archives {
+        .gallery-grid {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+        }
+      }
+    }
+  }
+}
+
+/* 0 ~ 767px (MOBILE) */
+@media screen and (max-width: 767px) {
+  .archive {
+    section {
+
+      p {
+        @include typo ("bodytextLg", $regular);
+      }
+
+      .filters .archive-navi {
+
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 10px;
+
+        /* 스크롤바 숨기면서 넘치는건 보이게 */
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+
+        &>* {
+          flex: 0 0 auto;
+          /* 아이템이 한 줄에서 유지되도록 */
+        }
+
+        &::-webkit-scrollbar {
+          display: none;
+          /* 스크롤바 숨기기 (선택) */
+        }
+      }
+
+      .main_recent-archives {
+        .gallery-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+        }
+      }
+    }
+  }
+}

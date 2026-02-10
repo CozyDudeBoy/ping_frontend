@@ -1,0 +1,547 @@
+@use "sass:map"; // 맵 함수 모듈 호출
+@use "sass:math"; // 수학 연산 모듈 호출 (나누기 연산용)
+
+@font-face {
+  font-family: 'KoreaInstituteOfMachineryAndMaterials';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2212@1.0/KIMM_Light.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'KoreaInstituteOfMachineryAndMaterials';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2212@1.0/KIMM_Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+html {
+  font-size: 16px;
+}
+
+
+/* 변수 */
+// color
+$primary_pink: #FF6E79;
+$primary_mint: #43ECAC;
+$primary_blue: #023FA1;
+$gradient: linear-gradient(120deg,
+    #FF6E79 0%,
+    #7a5fa3 25%,
+    #023FA1 50%,
+    #1976a3 75%,
+    #43ECAC 100%);
+$main_gray_50: #F9FAFB;
+$main_gray_100: #F3F4F6;
+$main_gray_200: #E5E7EB;
+$main_gray_300: #D2D5DA;
+$main_gray_400: #9CA3AF;
+$main_gray_500: #6D7280;
+$main_gray_600: #4B5563;
+$main_gray_700: #374151;
+$main_gray_800: #1F2937;
+$main_gray_900: #111827;
+$main-black: #000000;
+$main-white: #ffffff;
+$bg-p: #FFE3E3;
+$bg-m: #E1FFF4;
+$bg-b: #d4e5ff;
+// font
+$font-family-kimm: 'KoreaInstituteOfMachineryAndMaterials';
+$font-family-inter: 'Inter';
+$bold: 700;
+$medium: 500;
+$regular: 400;
+$light: 300;
+
+/* 타이포 믹스인 수정 */
+$typo-styles: (
+  "displayXl": (size: 64px, family: $font-family-kimm, lh: 130%, ls: 0),
+  "displayLg": (size: 56px, family: $font-family-kimm, lh: 130%, ls: 0),
+  "displayMd": (size: 48px, family: $font-family-kimm, lh: 130%, ls: 0),
+  "displaySm": (size: 30px, family: $font-family-kimm, lh: 130%, ls: 0),
+  "headingXl": (size: 36px, family: $font-family-inter, lh: 130%, ls: -0.02em),
+  "headingLg": (size: 30px, family: $font-family-inter, lh: 130%, ls: -0.02em),
+  "headingMd": (size: 24px, family: $font-family-inter, lh: 130%, ls: -0.02em),
+  "headingSm": (size: 20px, family: $font-family-inter, lh: 130%, ls: -0.02em),
+  "bodytextXl": (size: 18px, family: $font-family-inter, lh: 28px, ls: -0.02em),
+  "bodytextLg": (size: 16px, family: $font-family-inter, lh: 26px, ls: -0.02em),
+  "bodytextMd": (size: 14px, family: $font-family-inter, lh: 20px, ls: -0.02em),
+  "bodytextSm": (size: 12px, family: $font-family-inter, lh: 20px, ls: -0.02em),
+  "inter-label": (size: 10px, family: $font-family-inter, lh: 18px, ls: -0.02em),
+);
+
+// 타이포 통합 믹스인 (map.get 사용)
+@mixin typo($name, $weight: 400) {
+  $style: map.get($typo-styles, $name); // map-get 대신 map.get 사용
+
+  @if $style ==null {
+    @error "Unknown typo style: #{$name}";
+  }
+
+  font-family: map.get($style, family);
+  font-size: map.get($style, size);
+  font-weight: $weight;
+  line-height: map.get($style, lh);
+  letter-spacing: map.get($style, ls);
+}
+
+// 사용 예시
+.title {
+  @include typo("displayXl", $bold);
+}
+
+.content {
+  @include typo("bodytextLg");
+}
+
+/* 그림자 */
+//들어간 그림자
+@mixin neumorphism-shadow {
+  box-shadow:
+    inset 5px 5px 10px $main_gray_300,
+    inset -5px -5px 10px $main-white,
+    3px 3px 20px $main_gray_200;
+}
+
+//버튼 그림자
+@mixin btn-shadow {
+  box-shadow:
+    inset 2px 2px 10px $main-white,
+    inset -2px -2px 20px rgba(156, 163, 175, 0.4),
+    -2px -2px 10px rgba(229, 231, 235, 0.2);
+}
+
+@mixin sns-shadow {
+  background: $main_gray_50; // 반드시 아주 연한 회색 톤이어야 함 (핵심!!)
+  border-radius: 40px;
+
+  box-shadow:
+    /* 밝은 부분(왼쪽 위) */
+    -6px -6px 12px rgba(255, 255, 255, 0.8),
+
+    /* 어두운 부분(오른쪽 아래) */
+    6px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 버튼 */
+@mixin btn($size: "md", // lg, md, sm
+  $type: "primary", // primary, outline, fixed, custom
+  $shadow: true, // 그림자 유무
+  $bg: null, // 배경색 직접 지정
+  $color: null, // 글자색 직접 지정
+  $border: null, // border 색 직접 지정
+  $hover: true //hover 기본값 안쓸경우 fasle
+  ) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  text-align: center;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+
+  // ★ 그림자 옵션
+  @if $shadow ==true {
+    @include btn-shadow;
+  }
+
+  @else {
+    box-shadow: none;
+  }
+
+  // 고정 너비 타입 (데스크탑용)
+  @if $type =="fixed" {
+    width: 250px;
+    height: 72px;
+    @include typo("headingMd", $bold);
+
+    background: if($bg !=null, $bg, $primary_pink);
+    color: if($color !=null, $color, $main-white);
+    border: 1px solid if($border !=null, $border, transparent);
+
+    @if $hover {
+
+      &:hover,
+      &:focus-visible {
+        background: $primary_mint;
+      }
+    }
+  }
+
+  // 고정 너비 타입 (모바일용 추가)
+  @else if $type =="fixedMo" {
+    width: 160px;
+    height: 50px;
+    @include typo("bodytextLg", $bold);
+
+    background: if($bg !=null, $bg, $primary_pink);
+    color: if($color !=null, $color, $main-white);
+    border: 1px solid if($border !=null, $border, transparent);
+
+    @if $hover {
+
+      &:hover,
+      &:focus-visible {
+        background: $primary_mint;
+      }
+    }
+  }
+
+  // ----------------
+  // 다른 타입들
+  // ----------------
+  @else {
+
+    // 사이즈
+    @if $size =="lg" {
+      padding: 16px 32px;
+      @include typo("headingMd", $bold);
+    }
+
+    @else if $size =="sm" {
+      padding: 8px 16px;
+      @include typo("bodytextLg", $bold);
+    }
+
+    @else {
+      padding: 12px 24px;
+      @include typo("headingSm", $bold);
+    }
+
+    // primary
+    @if $type =="primary" {
+      background: if($bg !=null, $bg, $primary_pink);
+      color: if($color !=null, $color, $main-white);
+      border: 1px solid if($border !=null, $border, transparent);
+
+      @if $hover {
+
+        &:hover,
+        &:focus-visible {
+          background: $primary_mint;
+        }
+      }
+    }
+
+    // outline
+    @else if $type =="outline" {
+      background: transparent;
+      color: if($color !=null, $color, $primary_pink);
+      border: 1px solid if($border !=null, $border, $primary_pink);
+
+      @if $hover {
+        &:hover {
+          background: rgba($primary_pink, 0.1);
+        }
+      }
+    }
+
+    // custom (색상 완전 직접 지정)
+    @else if $type =="custom" {
+      background: $bg;
+      color: $color;
+      border: 1px solid $border;
+    }
+  }
+}
+
+/* 함수 수정 (나누기 연산 math.div 사용) */
+// 1. 모바일 REM 변환
+@function rem($px) {
+  @return math.div($px, 16) * 1rem; // $px / 16 대신 math.div 사용
+}
+
+// 2. 모바일 VW 변환 (기준 768px)
+@function mo-vw($px) {
+  @return math.div($px, 768) * 100vw;
+}
+
+// 3. PC VW 변환 (기준 1400px)
+@function pc-vw($px) {
+  @return math.div($px, 1400) * 100vw;
+}
+
+/* 그리드 시스템 */
+.container {
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media screen and (min-width: 1920px) {
+  @for $i from 1 through 12 {
+    .pc-col-start-#{$i} {
+      grid-column-start: #{$i};
+    }
+
+    .pc-col-#{$i} {
+      grid-column: span #{$i};
+    }
+  }
+
+  .container {
+    max-width: 100vw;
+    padding: 0 72px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: 36px;
+  }
+}
+
+/* 1440 ~ 1919 — Desktop */
+@media screen and (min-width: 1440px) and (max-width: 1919px) {
+  .container {
+    max-width: 100%;
+    padding: 0 48px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: 32px;
+  }
+}
+
+/* 1024 ~ 1439 — Tablet Landscape / Small Laptop */
+@media screen and (min-width: 1024px) and (max-width: 1439px) {
+  .container {
+    max-width: 100%;
+    padding: 0 32px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: 24px;
+  }
+}
+
+/* 768 ~ 1023px (TABLET) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .container {
+    max-width: 100%;
+    padding: 0 16px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    column-gap: 20px;
+  }
+}
+
+/* 0 ~ 767px (MOBILE) */
+@media screen and (max-width: 767px) {
+  .container {
+    max-width: 100%;
+    padding: 0 16px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 20px;
+  }
+}
+
+@for $i from 1 through 12 {
+  .col-#{$i} {
+    grid-column: span #{$i};
+  }
+}
+
+@for $i from 1 through 12 {
+  .col-start-#{$i} {
+    grid-column-start: #{$i};
+  }
+}
+
+/* 
+사용 예시
+<div class="container">
+  <div class="grid">
+<!-- 12컬럼 기준 4칸(1/3)씩 차지하는 박스 3개 -->
+    <div class="col-4">Box 1</div>
+    <div class="col-4">Box 2</div>
+    <div class="col-4">Box 3</div>
+  </div>
+</div> 
+*/
+// 기본 리셋 
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+div,
+span,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+abbr,
+address,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+samp,
+small,
+strong,
+sub,
+sup,
+var,
+b,
+i,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+}
+
+// 3. 본문 및 레이아웃 설정
+body {
+  line-height: 1;
+}
+
+// HTML5 시맨틱 태그 블록 설정
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+// 4. 목록 및 텍스트 요소
+nav ul,
+ol,
+li {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+
+  &::before,
+  &::after {
+    content: '';
+    content: none;
+  }
+}
+
+a {
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+  color: $main_gray_800;
+  text-decoration: none; // 필요 시 추가
+}
+
+// 5. 강조 및 수정 태그
+ins {
+  background-color: $main_gray_50;
+  color: $main_gray_800;
+  text-decoration: none;
+}
+
+mark {
+  background-color: $main_gray_50;
+  color: $main_gray_800;
+  font-style: italic;
+  font-weight: bold;
+}
+
+del {
+  text-decoration: line-through;
+}
+
+abbr[title],
+dfn[title] {
+  border-bottom: 1px dotted;
+  cursor: help;
+}
+
+// 6. 표 및 기타 양식
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid $main_gray_500;
+  margin: 1em 0;
+  padding: 0;
+}
+
+input,
+select {
+  vertical-align: middle;
+}

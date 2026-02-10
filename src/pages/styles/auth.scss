@@ -1,0 +1,297 @@
+@use '../../styles/base.scss' as *;
+
+/*공통 서식*/
+//select
+.custom-select {
+  position: relative;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #fff;
+  @include neumorphism-shadow;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .selected {
+    @include typo("bodytextLg", $regular);
+    color: $main_gray_800;
+  }
+
+  .arrow {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-40%);
+  }
+
+  .options {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    width: 100%;
+    max-height: 180px;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px 0;
+    @include neumorphism-shadow;
+    z-index: 99;
+
+    li {
+      margin: 12px 20px;
+      cursor: pointer;
+      @include typo("bodytextLg", $regular);
+      color: $main_gray_700;
+
+      &:hover {
+        background: $bg-p;
+      }
+    }
+  }
+}
+
+//입력창
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+
+  label {
+    @include typo("headingSm", $regular);
+  }
+
+  input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+    border: none;
+    border-radius: 10px;
+    @include typo("headingSm", $regular);
+    @include neumorphism-shadow;
+
+    &::placeholder {
+      @include typo("headingSm", $regular);
+      color: $main_gray_400;
+    }
+  }
+
+  .password-wrapper {
+    position: relative;
+
+    .eye-btn {
+      border: none;
+      background: none;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-40%);
+
+      img {
+        height: 28px;
+        pointer-events: none;
+      }
+    }
+  }
+}
+
+
+.auth {
+  .grid {
+    padding: 120px 0;
+
+    h2 {
+      padding: 50px;
+      @include typo("displaySm", $bold);
+      color: $primary_mint;
+      text-align: center;
+    }
+
+    .social-login {
+      display: flex;
+      justify-content: space-around;
+      padding: 40px 40px;
+
+      li {
+        border-radius: 40px;
+        height: 80px;
+        @include sns-shadow;
+      }
+
+      a {
+        display: inline-block;
+        cursor: pointer;
+        overflow: hidden;
+      }
+
+      img {
+        width: 80px;
+        border-radius: 40px;
+      }
+    }
+
+    button[type="submit"] {
+      @include btn("md", "fixed");
+      border: none;
+      width: 100%;
+    }
+  }
+}
+
+//login 서식
+.login_section {
+  height: 100vh;
+
+  .login_form {
+    a {
+      margin: 20px 0;
+      display: block;
+      text-align: right;
+      color: $primary_blue;
+      border-bottom: 1px solid $primary_blue;
+      width: fit-content;
+      margin-left: auto;
+    }
+  }
+
+  .login_bottom {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+    gap: 20px;
+    text-align: center;
+
+    a {
+      border-bottom: 1px solid $main_gray_800;
+      align-self: center;
+    }
+  }
+}
+
+//signup 서식
+.signup_section {
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px; // 선과 글자 사이 여백
+
+    span {
+      white-space: nowrap; // 줄바꿈 방지
+      @include typo("headingSm", $regular);
+      color: $main_gray_800;
+    }
+
+    &::before,
+    &::after {
+      content: "";
+      flex: 1; // 선을 양쪽으로 쭉 늘리기
+      height: 1px;
+      background: $main_gray_800;
+    }
+  }
+
+  button[type="submit"] {
+    margin: 40px 0px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .auth .grid .col-4 {
+    grid-column: 5 / span 4;
+  }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1439px) {
+  .auth .grid .col-4 {
+    grid-column: 4 / span 6;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .auth .grid .col-4 {
+    grid-column: 2 / span 6;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .auth .grid {
+    padding: 40px 0;
+
+    .col-4 {
+      @include typo ("bodytextLg", $regular);
+
+      h2 {
+        padding: 30px 0;
+      }
+
+      .social-login {
+        padding: 20px 40px;
+
+        li {
+          height: 60px;
+        }
+
+        img {
+          width: 60px;
+        }
+      }
+
+      .form-group {
+        label {
+          @include typo("bodytextLg", $regular)
+        }
+
+        input {
+          width: 100%;
+          box-sizing: border-box;
+          padding: 12px;
+          border: none;
+          border-radius: 10px;
+          @include typo("bodytextLg", $regular);
+          @include neumorphism-shadow;
+
+          &::placeholder {
+            @include typo("bodytextLg", $regular);
+            color: $main_gray_400;
+          }
+        }
+      }
+    }
+
+    .divider span {
+      @include typo("bodytextMd", $regular);
+    }
+
+    button[type="submit"] {
+      @include btn(md, "fixedMo");
+      border: none;
+      width: 100%;
+    }
+  }
+
+  .custom-select {
+    padding: 12px;
+
+
+    .selected {
+      @include typo("bodytextLg", $regular);
+    }
+
+    .arrow {
+      font-size: 14px;
+    }
+
+    .options {
+      max-height: 120px;
+
+      li {
+        margin: 12px 20px;
+        @include typo("bodytextLg", $regular);
+      }
+    }
+  }
+
+}

@@ -1,0 +1,899 @@
+@use './base.scss' as *;
+
+header.guest+main .main_hero-section .grid {
+  padding-top: 280px;
+}
+html, body {
+  height: 100%;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1; /* 핵심 */
+}
+/* =========================================================
+  Typography (main / section)
+  - main 안의 article/section 기본 타이포 세팅
+  - 디자인 유지: 기존 include / 컬러 그대로
+========================================================= */
+main {
+  article {
+    h2 {
+      @include typo("displayXl", $bold);
+      white-space: nowrap; 
+    }
+
+    p {
+      @include typo("displaySm", $bold);
+    }
+  }
+
+  section {
+    h2 {
+      @include typo("displayMd", $bold);
+    }
+
+    p {
+      @include typo("headingMd", $regular);
+      color: $main_gray_500;
+    }
+  }
+}
+
+/* =========================================================
+  HERO SECTION
+  - 상단 그라데이션 + 텍스트/이미지/버튼 영역
+========================================================= */
+.main_hero-section {
+  background: $gradient;
+
+  .grid {
+    padding: 200px 0;
+    align-items: center;
+
+    /* hero 텍스트/버튼 영역(좌) + 이미지(우) 배치용 */
+    .col-12 {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .top-text {
+      color: $main-white;
+    }
+
+    /* 우측 히어로 이미지 */
+    .hero-image {
+      width: 380px;
+      justify-self: end;
+    }
+
+    /* CTA 버튼 묶음 */
+    .hero-btns {
+      display: flex;
+      gap: 15px;
+      margin-top: 28px;
+
+      .achive-btn {
+        @include btn("md", "fixed", false);
+      }
+
+      .sample-btn {
+        @include btn("lg", "fixed", false, #fff, $main_gray_600);
+      }
+    }
+  }
+}
+
+/* =========================================================
+  FEEDBACK EXPLORER (좌측 메뉴/칩 + 우측 카드 리스트)
+========================================================= */
+.main_feedback-explorer {
+  .grid {
+    padding: 100px 0;
+  }
+
+  .explorer_aside {
+
+    /* 좌측 메뉴 리스트 */
+    .menu_list {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px; // 사진처럼 여백 크게
+    }
+
+    /* 메뉴 버튼(접힘/열림 공통) */
+    .menu_btn {
+      border: 0;
+      background: transparent;
+      padding: 20px 30px;
+      width: 100%;
+      cursor: pointer;
+      text-align: left;
+
+      @include typo("headingMd", $bold);
+      color: $main_gray_700;
+
+      opacity: 0.55;
+      transition: opacity 0.2s ease, color 0.2s ease;
+
+      &:hover {
+        opacity: 0.85;
+        color: $main_gray_800;
+      }
+    }
+
+    /* 메뉴 아이템 열림 상태 */
+    .main_item.is-open {
+      background: $main_gray_50;
+      border-radius: 28px;
+
+      @include neumorphism-shadow;
+
+      /* 열림 상태에선 버튼이 상단 헤더처럼 보이도록 */
+      .menu_btn {
+        opacity: 1;
+        color: $main_gray_900;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .active_panel {
+        margin-bottom: 18px;
+        padding: 0px 6px 6px;
+        background: transparent;
+      }
+
+      /* 칩(카테고리) 라인 */
+      .chip_row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        padding: 0px 40px;
+      }
+
+      /* 칩 기본 스타일 (중복 정의는 여기로 합침) */
+      .chip {
+        border: 0;
+        cursor: pointer;
+        border-radius: 999px;
+        padding: 10px 16px;
+
+        background: $main-white;
+        color: $main_gray_600;
+
+        @include typo("bodytextXl", $bold);
+
+        /* 칩 레이아웃(기존 .chip 중복 정의 병합) */
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        box-shadow:
+          0 10px 22px rgba(17, 24, 39, 0.12),
+          inset 0 2px 6px rgba(255, 255, 255, 0.9);
+
+        transition: transform 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow:
+            0 14px 26px rgba(17, 24, 39, 0.14),
+            inset 0 2px 8px rgba(255, 255, 255, 0.9);
+        }
+      }
+
+      .chip_arrow {
+        padding-top: 4px;
+        height: 20px;
+      }
+
+      /* 선택된 칩 */
+      .chip.is-active {
+        color: $main_gray_800;
+        position: relative;
+      }
+    }
+  }
+}
+
+/* =========================================================
+  FEEDBACK LIST (cards 영역)
+  - 카드 그리드 + empty 상태 + 더보기 버튼
+========================================================= */
+.feedbackcons {
+  min-width: 0;
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+    min-height: 216px; // 가운데 정렬을 위한 기본 공간
+    position: relative;
+
+    /* 데이터 없을 때 중앙 안내 문구 */
+    .empty {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+
+      color: $main_gray_500;
+      @include typo("bodytextLg", $bold);
+    }
+  }
+
+  /* empty가 있을 땐 그리드 대신 중앙정렬로 보여주기 */
+  .cards:has(.empty) {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .more_wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 32px;
+  }
+
+  .btn_more {
+    @include btn("md", "primary", true, #fff, $main_gray_600);
+  }
+}
+
+/* =========================================================
+  FEEDBACK CARD (개별 카드)
+========================================================= */
+.feedback_card {
+  background: $main-white;
+  border-radius: 22px;
+  padding: 26px 28px;
+  min-height: 216px;
+
+  box-shadow:
+    0 16px 32px rgba(17, 24, 39, 0.12),
+    inset 0 2px 10px rgba(255, 255, 255, 0.95);
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  .badge {
+    align-self: flex-start;
+    background: $primary_mint;
+    color: $main_gray_700;
+    border-radius: 6px;
+    padding: 2px 8px;
+    @include typo("bodytextMd", $bold);
+  }
+
+  .card-title {
+    @include typo("headingMd", $bold);
+    color: $main_gray_900;
+
+    /* 2줄 말줄임 */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .bottom {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 14px;
+
+    .pins {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+
+      img {
+        display: block;
+      }
+
+      span {
+        @include typo("bodytextLg", $bold);
+        color: $main_gray_700;
+      }
+    }
+
+    .date {
+      @include typo("bodytextLg", $bold);
+      color: $main_gray_400;
+    }
+  }
+}
+
+/* =========================================================
+  RECENT ARCHIVES (Masonry)
+========================================================= */
+/* DesignGrid.scss */
+
+.gallery-masonry {
+  padding-top: 40px;
+  column-count: 6; // 데스크탑에서 6줄
+  column-gap: 36px; // 가로 간격
+}
+
+.design-item {
+  break-inside: avoid; // 카드가 중간에서 쪼개지는 것 방지
+  margin: 0 0 50px; // 세로 간격
+  border-radius: 20px;
+  overflow: hidden;
+  background: $main-white;
+  box-shadow: 0 10px 30px rgba(17, 24, 39, 0.1);
+
+  display: inline-block; // columns 안에서 안정적으로 카드처럼 동작
+  width: 100%; // 컬럼 폭 꽉 채우기
+}
+
+.thumb-wrap {
+  width: 100%;
+  overflow: hidden;
+  aspect-ratio: var(--ratio, 4/5);
+}
+
+.thumb {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.meta {
+  padding: 12px 10px 14px;
+
+  h3 {
+    @include typo("headingSm", $bold);
+    margin-bottom: 6px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-height: 52px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .date {
+    @include typo("bodytextSm", $regular);
+    color: $main_gray_400;
+    text-align: end;
+  }
+
+  .icons {
+    margin-top: 8px;
+    justify-content: end;
+    align-items: center;
+    display: flex;
+    gap: 10px;
+    color: $main_gray_500;
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      @include typo("bodytextMd", $regular);
+
+      img {
+        width: 22px;
+
+      }
+    }
+  }
+}
+
+/* =========================================================
+  ARCHIVE CTA SECTION (배경 이미지 + 중앙 버튼)
+========================================================= */
+.main_feedback-archive {
+  background-size: cover; // 꽉 채우기
+  background-repeat: no-repeat;
+  background-position: center; // 가운데 정렬
+  background-color: rgba(0, 0, 0, 0.65); // 어둡기 정도 조절
+  background-blend-mode: darken;
+
+  .grid {
+    padding: 160px 0;
+  }
+
+  .col-12 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 30px;
+
+    h2 {
+      color: $main-white;
+      @include typo("displayMd", $bold);
+    }
+
+    .upload-btn {
+      @include btn("md", "fixed", false);
+    }
+  }
+}
+
+/* =========================================================
+  RESPONSIVE
+========================================================= */
+
+/* -------------------- 1439 이하: 줄바꿈 유틸 -------------------- */
+@media (max-width: 1439px) {
+  .tab-br {
+    display: block;
+    /* 태블릿 아래에서만 줄바꿈 */
+  }
+}
+
+/* -------------------- 1440 ~ 1919 -------------------- */
+@media screen and (min-width: 1440px) and (max-width: 1919px) {
+  header.guest+main .main_hero-section .grid {
+    padding: 180px 0 100px 0;
+  }
+
+  .main_feedback-explorer {
+    .col-4 {
+      grid-column: span 4;
+    }
+
+    .col-8 {
+      grid-column: span 8;
+    }
+
+    .feedbackcons .cards {
+      gap: 28px;
+      min-height: 190px;
+    }
+  }
+
+  .gallery-masonry {
+    column-count: 5;
+    column-gap: 32px;
+  }
+}
+
+/* -------------------- 1024 ~ 1439 -------------------- */
+@media screen and (min-width: 1024px) and (max-width: 1439px) {
+  header.guest+main .main_hero-section .grid {
+    padding: 180px 0 100px 0;
+  }
+
+  /* 섹션 타이포만 변경(디자인 유지) */
+  main {
+    section {
+      h2 {
+        font-size: 36px;
+      }
+
+      p {
+        @include typo("bodytextLg", $regular);
+        color: $main_gray_500;
+      }
+    }
+  }
+
+  .col-12 {
+    grid-column: span 12;
+  }
+
+  .main_hero-section {
+    .col-4 {
+      grid-column: span 6;
+    }
+
+    .grid {
+      padding: 100px 0;
+
+      .hero-image {
+        width: 320px;
+      }
+    }
+  }
+
+  .main_feedback-explorer {
+    .col-4 {
+      grid-column: span 4;
+    }
+
+    .col-8 {
+      grid-column: span 8;
+    }
+
+    .feedbackcons .cards {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      gap: 28px;
+      min-height: 190px;
+    }
+
+    .feedback_card {
+      min-height: 190px;
+    }
+  }
+
+  .main_feedback-archive .grid {
+    padding: 40px 0;
+
+    .col-12 {
+      img {
+        height: 200px;
+      }
+
+      h2 {
+        @include typo("displaySm", $bold);
+      }
+    }
+  }
+
+  .gallery-masonry {
+    column-count: 4;
+    column-gap: 24px;
+  }
+}
+
+/* -------------------- 768 ~ 1023 -------------------- */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  header.guest+main .main_hero-section .grid {
+    padding: 180px 0 100px 0;
+  }
+
+  main {
+    article {
+      h2 {
+        @include typo("displayMd", $bold);
+      }
+    }
+
+    section {
+      .col-12 {
+        grid-column: span 8;
+      }
+
+      h2 {
+        @include typo("displaySm", $bold);
+      }
+
+      p {
+        @include typo("bodytextLg", $regular);
+        color: $main_gray_500;
+      }
+    }
+  }
+
+  .main_hero-section {
+    .col-12 {
+      grid-column: span 8;
+    }
+
+    .col-4 {
+      grid-column: span 5;
+    }
+
+    .grid {
+      .hero-image {
+        width: 300px;
+      }
+
+      /* 태블릿에서 버튼 가운데 정렬 */
+      .hero-btns {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 28px;
+      }
+    }
+  }
+
+  .main_feedback-explorer {
+    .grid {
+      gap: 30px;
+      padding: 20px 0;
+
+      .col-4 {
+        grid-column: span 8;
+      }
+
+      .col-8 {
+        grid-column: span 8;
+      }
+    }
+
+    .explorer_aside {
+      .menu_btn {
+        padding: 10px 30px 10px 30px;
+      }
+
+      .main_item {
+        &.is-open {
+          .active_panel {
+            margin-bottom: 6px;
+          }
+
+          .chip {
+            padding: 6px 12px;
+            // @include typo('bodytextMd', $bold);
+          }
+
+          .chip_arrow {
+            padding-top: 4px;
+            height: 14px;
+          }
+
+          .chip_row {
+            gap: 10px;
+            padding: 0px 14px;
+          }
+        }
+      }
+    }
+
+    .feedbackcons {
+      .cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        min-height: 120px;
+
+        .feedback_card {
+          min-height: 120px;
+          gap: 10px;
+
+          .card-title {
+            @include typo("bodytextLg", bold);
+          }
+
+          /* badge / bottom 내부의 date, pins 타이포 조정 */
+          .badge,
+          .bottom {
+
+            .date,
+            .pins span {
+              @include typo("bodytextMd");
+            }
+          }
+
+          .badge {
+            padding: 2px 8px;
+          }
+        }
+      }
+    }
+  }
+
+  .main_feedback-archive .grid {
+    padding: 40px 0;
+
+    .col-12 {
+      img {
+        height: 160px;
+      }
+
+      h2 {
+        @include typo("displaySm", $bold);
+      }
+    }
+  }
+
+  .gallery-masonry {
+    column-count: 3;
+    column-gap: 20px;
+  }
+}
+
+/* -------------------- 0 ~ 767 (Mobile) -------------------- */
+@media screen and (max-width: 767px) {
+  header.guest+main .main_hero-section .grid {
+    padding-top: 20px;
+  }
+  .meta {
+  padding: 12px 10px 14px;
+
+  h3 {
+    @include typo("bodytextLg", $bold);
+    margin-bottom: 6px;
+    overflow: hidden;
+    white-space: wrap;
+    text-overflow: ellipsis;
+    min-height: 52px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }}
+
+  main {
+    article {
+
+      h2 {
+        @include typo("displaySm", $bold);
+      }
+
+      /* 모바일에서 article p는 기존 커스텀 폰트/두께/크기 유지 */
+      p {
+        font-family: $font-family-kimm;
+        font-weight: 300;
+        font-size: 18px;
+      }
+    }
+
+    section {
+      .col-12 {
+        grid-column: span 4;
+      }
+
+      h2 {
+        @include typo("displaySm", $bold);
+      }
+
+      p {
+        @include typo("bodytextLg", $regular);
+        color: $main_gray_500;
+      }
+    }
+
+    .mo-br {
+      display: block;
+      /* 모바일에서만 줄바꿈 */
+    }
+  }
+
+  .main_hero-section {
+    .grid {
+      padding: 16px 0;
+
+      .col-12 {
+        grid-column: span 4;
+        flex-direction: column;
+      }
+
+      .col-4 {
+        grid-column: span 4;
+      }
+
+      .top-text {
+        h2 {
+          margin-bottom: 10px;
+        }
+
+        p {
+          display: block;
+          width: 350px;
+        }
+      }
+
+      /* 모바일 이미지 중앙 */
+      .hero-image {
+        grid-column: 1 / -1;
+        display: block;
+        justify-self: center;
+        align-self: center;
+        max-width: 100%;
+        width: 160px;
+        height: auto;
+      }
+
+      /* 모바일 버튼: 줄바꿈 허용 + 중앙정렬 */
+      .hero-btns {
+        gap: 15px;
+        margin-top: 10px;
+        grid-column: 1 / -1;
+
+        min-width: 0;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        .achive-btn {
+          @include btn(md, "fixedMo", false);
+        }
+
+        .sample-btn {
+          @include btn("md", "fixedMo", false, #fff, $main_gray_600);
+        }
+      }
+    }
+  }
+
+  .main_feedback-explorer {
+    .grid {
+      gap: 30px;
+      padding: 20px 0;
+
+      .col-8 {
+        grid-column: span 4;
+      }
+    }
+
+    .explorer_aside {
+      .menu_btn {
+        padding: 14px 20px;
+        @include typo("bodytextLg", $bold);
+      }
+
+      .main_item {
+        &.is-open {
+          .chip {
+            padding: 6px 12px;
+            @include typo("bodytextMd", $bold);
+          }
+
+          .chip_arrow {
+            padding-top: 4px;
+            height: 14px;
+          }
+
+          .chip_row {
+            gap: 10px;
+            padding: 0px 14px;
+          }
+        }
+      }
+    }
+
+    .feedbackcons {
+      .cards {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        min-height: 120px;
+
+        .feedback_card {
+          min-height: 120px;
+          gap: 10px;
+
+          .card-title {
+            @include typo("bodytextLg", bold);
+          }
+
+          .badge,
+          .bottom {
+
+            .date,
+            .pins span {
+              @include typo("bodytextMd");
+            }
+          }
+
+          .badge {
+            padding: 2px 8px;
+          }
+        }
+      }
+    }
+  }
+
+  .gallery-masonry {
+    column-count: 2;
+    column-gap: 20px;
+  }
+
+  .main_feedback-archive .grid {
+    padding: 40px 0;
+
+    .col-12 {
+      img {
+        height: 160px;
+      }
+
+      h2 {
+        @include typo("displaySm", $bold);
+      }
+
+      .upload-btn {
+        @include btn(md, "fixedMo", false);
+      }
+    }
+  }
+}
