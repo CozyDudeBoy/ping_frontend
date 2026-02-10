@@ -15,7 +15,7 @@ function FeedbackExplorer() {
      카테고리 DB 로딩
   =============================== */
   useEffect(() => {
-    fetch('http://localhost:9070/api/categories')
+    fetch('https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/categories')
       .then(res => res.json())
       .then(data => setCategories(data))
       .catch(err => console.error('카테고리 로딩 실패:', err));
@@ -25,7 +25,7 @@ function FeedbackExplorer() {
      게시물 DB 로딩
   =============================== */
   useEffect(() => {
-    fetch('http://localhost:9070/api/posts')
+    fetch('https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/posts')
       .then(res => res.json())
       .then(data => setFeedbacks(data))
       .catch(err => console.error('게시물 로딩 실패:', err));

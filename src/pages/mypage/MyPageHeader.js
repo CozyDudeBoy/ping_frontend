@@ -16,8 +16,8 @@ export default function MyPageHeader() {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
 
-  // Api 인스턴스의 baseURL(=http://localhost:9070)
-  const API_BASE = Api.defaults.baseURL || "http://localhost:9070";
+  // Api 인스턴스의 baseURL(=https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app)
+  const API_BASE = Api.defaults.baseURL || "https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app";
   const DEFAULT_AVATAR = `${API_BASE}/uploads/default.png`;
 
   // 1) 프로필 조회: /users/me 로 통일

@@ -23,7 +23,7 @@ function Upload(props) {
      =============================== */
   useEffect(() => {
     axios
-      .get('http://localhost:9070/api/categories')
+      .get('https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/categories')
       .then(res => {
         console.log('카테고리 응답:', res.data);
         setCategories(res.data);
@@ -80,7 +80,7 @@ function Upload(props) {
   //     );
 
   //     const res = await axios.post(
-  //       'http://localhost:9070/api/posts',
+  //       'https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/posts',
   //       formData,
   //       {
   //         headers: {
@@ -134,7 +134,7 @@ function Upload(props) {
 
     try {
       const res = await axios.post(
-        'http://localhost:9070/api/posts',
+        'https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/posts',
         formData,
         {
           headers: {

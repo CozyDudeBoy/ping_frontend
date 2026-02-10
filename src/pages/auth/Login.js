@@ -27,7 +27,7 @@ function Login(props) {
 
     try {
       const res = await axios.post(
-        'http://localhost:9070/api/auth/login',
+        'https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/auth/login',
         form
       );
 

@@ -57,7 +57,7 @@ export default function AdminUsers() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("http://localhost:9070/admin/users", {
+        const res = await axios.get("https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/admin/users", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },

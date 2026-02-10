@@ -39,7 +39,7 @@ function Detail() {
     if (!id) return;
 
     axios
-      .get(`http://localhost:9070/api/designs/${id}`)
+      .get(`https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/designs/${id}`)
       .then(res => {
         const serverPins = res.data.pins || [];
         setPins(serverPins);
@@ -63,7 +63,7 @@ function Detail() {
   useEffect(()=>{
     if(!id) return;
 
-    axios.post(`http://localhost:9070/api/posts/${id}/view`)
+    axios.post(`https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/posts/${id}/view`)
     .catch(err=>{
       console.error('조회수 증가 실패:', err);
     });
@@ -75,7 +75,7 @@ function Detail() {
   const fetchAnswers = async (pinNo) => {
     try {
       const res = await axios.get(
-        `http://localhost:9070/api/pins/${pinNo}/answers`
+        `https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/pins/${pinNo}/answers`
       );
       setAnswers(res.data);
     } catch (err) {
@@ -112,7 +112,7 @@ function Detail() {
     if (!answerText.trim()) return;
 
     await axios.post(
-      `http://localhost:9070/api/pins/${selectedPin.pin_no}/answers`,
+      `https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/pins/${selectedPin.pin_no}/answers`,
       { content: answerText },
       {
         headers: {
@@ -160,7 +160,7 @@ function Detail() {
               <img
                 src={
                   post?.user_image
-                    ? `http://localhost:9070${post.user_image}`
+                    ? `https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app${post.user_image}`
                     : `${process.env.PUBLIC_URL}/images/default.png`
                 }
                 alt="프로필"
@@ -175,7 +175,7 @@ function Detail() {
               <div className="image_wrap">
                 {imageUrl && (
                   <img
-                    src={`http://localhost:9070${imageUrl}`}
+                    src={`https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app${imageUrl}`}
                     alt="상세 이미지"
                   />
                 )}

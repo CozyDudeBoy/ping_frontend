@@ -14,7 +14,7 @@ function Question() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:9070/qna/questions')
+      .get('https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/qna/questions')
       .then((res) => setItems(res.data))
       .catch((err) => console.error(err));
   }, [])

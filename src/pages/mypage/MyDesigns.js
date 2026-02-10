@@ -7,7 +7,7 @@ import IconEye from "../../assets/icon-eye.svg";
 import IconLike from "../../assets/icon-like.svg";
 import IconMessage from "../../assets/icon-message.svg";
 
-const API_BASE = "http://localhost:9070";
+const API_BASE = "https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app";
 const PLACEHOLDER = `${process.env.PUBLIC_URL}/images/thumb-placeholder.png`;
 
 const MyDesigns = () => {

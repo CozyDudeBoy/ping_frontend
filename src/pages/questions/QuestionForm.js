@@ -21,7 +21,7 @@ function QuestionForm() {
         }
         try {
             await axios.post(
-                'http://localhost:9070/qna/questions',
+                'https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/qna/questions',
                 { title, content },
                 {
                     headers: {

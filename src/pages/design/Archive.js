@@ -16,7 +16,7 @@ function Archive() {
      카테고리 로딩 (UI용)
      =============================== */
   useEffect(() => {
-    fetch('http://localhost:9070/api/categories')
+    fetch('https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/categories')
       .then(res => res.json())
       .then(data => {
         const subs = Object.values(data).flat();
@@ -82,7 +82,7 @@ function Archive() {
       map.set(item.id, {
         id: item.id,
         title: item.title,
-        image: `http://localhost:9070${item.imagePath}`,
+        image: `https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app${item.imagePath}`,
         date: item.createdAt,
         viewCount: item.viewCount ?? 0,
         question_count: item.pins ?? 0,

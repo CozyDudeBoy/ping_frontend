@@ -23,7 +23,7 @@ function DesignGallery() {
      게시물 로딩 함수
      =============================== */
   const fetchPosts = () => {
-    fetch("http://localhost:9070/api/posts")
+    fetch("https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/posts")
       .then((res) => res.json())
       .then((data) => {
         setItems(Array.isArray(data) ? data : []);
@@ -59,7 +59,7 @@ function DesignGallery() {
       map.set(item.id, {
         id: item.id,
         title: item.title,
-        image: `http://localhost:9070${item.imagePath}`,
+        image: `https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app${item.imagePath}`,
         date: item.createdAt,
         ratio: ratios[Math.floor(Math.random() * ratios.length)],
 

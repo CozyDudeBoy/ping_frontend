@@ -14,7 +14,7 @@ const HeaderUser = ({ variant }) => {
   const [keyword, setKeyword] = useState("");
 
   // ✅ Api baseURL
-  const API_BASE = Api.defaults.baseURL || "http://localhost:9070";
+  const API_BASE = Api.defaults.baseURL || "https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app";
   const DEFAULT_AVATAR_SRC = `${API_BASE}/uploads/default.png`;
 
   /* ===============================

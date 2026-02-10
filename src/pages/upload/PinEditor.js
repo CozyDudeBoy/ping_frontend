@@ -31,7 +31,7 @@ function PinEditor() {
   useEffect(() => {
     if (!postNo) return;
 
-    axios.get(`http://localhost:9070/api/designs/${postNo}`, {
+    axios.get(`https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/designs/${postNo}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
@@ -106,7 +106,7 @@ function PinEditor() {
     try {
       for (const pin of pins) {
         await axios.post(
-          'http://localhost:9070/api/pins',
+          'https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/pins',
           {
             postNo,
             imageNo,
@@ -163,7 +163,7 @@ function PinEditor() {
                 <div className="canvas_image_wrap">
                   <img
                     ref={imgRef}
-                    src={`http://localhost:9070${imagePath}`}
+                    src={`https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app${imagePath}`}
                     alt="업로드 이미지"
                     className="canvas_image"
                     draggable={false}
