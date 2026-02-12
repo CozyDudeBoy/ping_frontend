@@ -165,7 +165,7 @@ function Detail() {
               <img
                 src={
                   post?.user_image
-                    ? `${BASE_URL}/uploads/${post.user_image}`
+                    ? `https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/uploads/${post.user_image}`
                     : `${process.env.PUBLIC_URL}/images/default.png`
                 }
                 alt="프로필"
@@ -180,7 +180,7 @@ function Detail() {
               <div className="image_wrap">
                 {imageUrl && (
                   <img
-                    src={`${BASE_URL}${imageUrl}`}
+                    src={`https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app${imageUrl}`}
                     alt="상세 이미지"
                   />
                 )}
