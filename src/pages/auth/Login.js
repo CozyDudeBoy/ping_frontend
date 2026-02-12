@@ -88,7 +88,7 @@ function Login(props) {
               </div>
             </div>
 
-            <Link to="/find-account">아이디/비밀번호 찾기</Link>
+            <Link to="/find-account">아이디 / 비밀번호 찾기</Link>
             <button type="submit">로그인</button>
           </form>
 
