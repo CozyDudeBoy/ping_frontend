@@ -1,3 +1,5 @@
+
+
 @use './base.scss' as *;
 
 header.guest+main .main_hero-section .grid {
@@ -52,6 +54,9 @@ main {
 .main_hero-section {
   background: $gradient;
 
+  background-size: 400% 400%;
+  animation: gradientMove 8s ease infinite;
+
   .grid {
     padding: 200px 0;
     align-items: center;
@@ -89,6 +94,17 @@ main {
   }
 }
 
+@keyframes gradientMove {
+  0%{
+    background-position:  0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100%{
+    background-position: 0% 50%;
+  }
+}
 /* =========================================================
   FEEDBACK EXPLORER (좌측 메뉴/칩 + 우측 카드 리스트)
 ========================================================= */
