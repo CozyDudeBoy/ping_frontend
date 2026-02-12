@@ -22,16 +22,24 @@ function Detail() {
   const [selectedPin, setSelectedPin] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
   const [post, setPost] = useState(null);
+
+  // 모바일 댓글 모달
   const [isOpen, setIsOpen] = useState(false);
 
+  // 비 로그인시 댓글 입력 막기 
   const isLogin = !!localStorage.getItem('token');
 
+  // 핀 답변 상태 (DB)
   const [answers, setAnswers] = useState([]);
   const [answerText, setAnswerText] = useState('');
 
+  // 개인 메모 (로컬) -- 기능 disabled
+  // const [memo, setMemo] = useState([]);
+  // const [memoText, setMemoText] = useState('');
+
   /* ===============================
-     상세 데이터 로딩
-  =============================== */
+    상세 데이터 로딩
+     =============================== */
   useEffect(() => {
     if (!id) return;
 
@@ -44,6 +52,7 @@ function Detail() {
         setImageUrl(res.data.imageUrl || '');
         setPost(res.data.post || null);
 
+        // 첫 핀 자동 선택 시 답변도 불러오기
         if (serverPins.length > 0) {
           fetchAnswers(serverPins[0].pin_no);
         }
@@ -53,22 +62,21 @@ function Detail() {
       });
   }, [id]);
 
-  /* ===============================
-     조회수 증가
-  =============================== */
-  useEffect(() => {
-    if (!id) return;
+  /* ================================== 
+    조회수 증가
+  ================================ */
+  useEffect(()=>{
+    if(!id) return;
 
-    axios.post(
-      `https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/posts/${id}/view`
-    ).catch(err => {
+    axios.post(`https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/posts/${id}/view`)
+    .catch(err=>{
       console.error('조회수 증가 실패:', err);
     });
   }, [id]);
 
   /* ===============================
-     핀 답변 조회
-  =============================== */
+    핀 답변 조회
+     =============================== */
   const fetchAnswers = async (pinNo) => {
     try {
       const res = await axios.get(
@@ -82,8 +90,8 @@ function Detail() {
   };
 
   /* ===============================
-     핀 클릭
-  =============================== */
+    핀 클릭
+     =============================== */
   const handlePinClick = (pin) => {
     setSelectedPin(pin);
     fetchAnswers(pin.pin_no);
@@ -94,8 +102,8 @@ function Detail() {
   };
 
   /* ===============================
-     답변 작성
-  =============================== */
+    답변 작성
+     =============================== */
   const handleAddAnswer = async () => {
     const token = localStorage.getItem('token');
 
@@ -122,11 +130,31 @@ function Detail() {
     fetchAnswers(selectedPin.pin_no);
   };
 
+
+  /* ===============================
+    개인 메모 (로컬) -- 기능 disabled
+     =============================== */
+  // const handleAddMemo = () => {
+  //   if (!memoText.trim()) return;
+
+  //   const newMemo = {
+  //     id: Date.now(),
+  //     content: memoText,
+  //     date: new Date().toLocaleDateString('ko-KR', {
+  //       month: 'long',
+  //       day: 'numeric',
+  //     }),
+  //   };
+
+  //   setMemo(prev => […prev, newMemo]);
+  //   setMemoText('');
+  // };
+
   return (
     <section className="detail container">
       <article className="detail_box grid">
 
-        {/* 왼쪽 영역 */}
+        {/* 왼쪽 이미지 영역 */}
         <div className="detail-box_left col-8">
           <button onClick={() => navigate(-1)} className="back_btn">
             <img src={backIcon} alt="뒤로가기" />뒤로 가기
@@ -137,7 +165,7 @@ function Detail() {
               <img
                 src={
                   post?.user_image
-                    ? `https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app${post.user_image}`
+                    ? `${BASE_URL}/uploads/${post.user_image}`
                     : `${process.env.PUBLIC_URL}/images/default.png`
                 }
                 alt="프로필"
@@ -152,7 +180,7 @@ function Detail() {
               <div className="image_wrap">
                 {imageUrl && (
                   <img
-                    src={`https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app${imageUrl}`}
+                    src={`${BASE_URL}${imageUrl}`}
                     alt="상세 이미지"
                   />
                 )}
@@ -160,7 +188,8 @@ function Detail() {
                 {pins.map((pin, index) => (
                   <div
                     key={pin.pin_no}
-                    className={`pin_marker ${selectedPin?.pin_no === pin.pin_no ? 'active' : ''}`}
+                    className={`pin_marker ${selectedPin?.pin_no === pin.pin_no ? 'active' : ''
+                      }`}
                     style={{ left: `${pin.x}%`, top: `${pin.y}%` }}
                     onClick={() => handlePinClick(pin)}
                   >
@@ -170,6 +199,7 @@ function Detail() {
               </div>
             </div>
 
+            {/* 모바일 영역 모달버튼 */}
             <button
               className="mobile-comment-btn"
               onClick={() => setIsOpen(true)}
@@ -179,7 +209,7 @@ function Detail() {
           </div>
         </div>
 
-        {/* 오른쪽 영역 */}
+        {/* 오른쪽 답변 영역 */}
         <div className="detail-box_right col-4 hidden">
           <div className="sticky-inner">
             <p className="pin-label">
@@ -188,13 +218,11 @@ function Detail() {
                   ? pins.findIndex(p => p.pin_no === selectedPin.pin_no) + 1
                   : '-'}
               </span>
-              Pin Question
+              선택된 핀에 대한 피드백을 남겨주세요.
             </p>
 
             <hr />
-            <span className="selected-pin_qna">
-              {selectedPin?.question || '핀을 선택해주세요'}
-            </span>
+            <span className='selected-pin_qna'>{selectedPin?.question || '핀을 선택해주세요'}</span>
             <hr />
 
             <div className="box-right_card">
@@ -211,7 +239,7 @@ function Detail() {
                   <li key={a.answer_no}>
                     <strong>{a.user_nickname}</strong>
                     <br />
-                    {dayjs.utc(a.create_datetime).tz('Asia/Seoul').format('YYYY.MM.DD HH:mm')}
+                    {dayjs.utc(a.create_datetime).format('YYYY.MM.DD HH:mm')}
                     <br />
                     {a.answer_content}
                   </li>
@@ -235,13 +263,28 @@ function Detail() {
             </div>
 
             <div className="box-right_memo">
-              <p>My Memo (Private)</p>
+              <p>My Memo (Private) 🔐</p>
+              {/* {memo.map(m => (
+                <div key={m.id}>
+                  {m.content}
+                  <br />
+                  <span>{m.date}</span>
+                </div>
+              ))} */}
+
               <textarea
                 className="card-box"
-                placeholder="이 질문에 대한 개인 메모"
+                placeholder={`이 게시물에 대한 개인의 생각이나 메모를 자유롭게 남겨보세요.\n(작성한 내용은 본인만 볼 수 있습니다)`}
                 disabled
+              //value={memoText}
+              //onChange={(e) => setMemoText(e.target.value)}
               />
-              <button>메모 저장</button>
+
+              <button
+              // onClick={handleAddMemo}
+              >
+                메모 저장
+              </button>
             </div>
           </div>
         </div>
@@ -260,7 +303,6 @@ function Detail() {
             <button className="close_btn" onClick={() => setIsOpen(false)}>
               <img src={CloseIcon} alt="닫기" />
             </button>
-
             <div className="detail-box_right">
               <div className="sticky-inner">
                 <p className="pin-label">
@@ -269,13 +311,11 @@ function Detail() {
                       ? pins.findIndex(p => p.pin_no === selectedPin.pin_no) + 1
                       : '-'}
                   </span>
-                  Pin Question
+                  선택된 핀에 대한 피드백을 남겨주세요.
                 </p>
 
                 <hr />
-                <span className="selected-pin_qna">
-                  {selectedPin?.question || '핀을 선택해주세요'}
-                </span>
+                <span className='selected-pin_qna'>{selectedPin?.question || '핀을 선택해주세요'}</span>
                 <hr />
 
                 <div className="box-right_card">
@@ -293,7 +333,7 @@ function Detail() {
                         <strong>{a.user_nickname}</strong>
                         <br />
                         <span>
-                          {dayjs.utc(a.create_datetime).tz('Asia/Seoul').format('YYYY.MM.DD HH:mm')}
+                          {dayjs.utc(a.create_datetime).format('YYYY.MM.DD HH:mm')}
                         </span>
                         <br />
                         {a.answer_content}
@@ -313,22 +353,37 @@ function Detail() {
                     onChange={(e) => setAnswerText(e.target.value)}
                   />
 
-                  <button onClick={handleAddAnswer}>댓글 게시</button>
+                  <button 
+                    onClick={handleAddAnswer}>댓글 게시</button>
                   <hr />
                 </div>
 
                 <div className="box-right_memo">
-                  <p>My Memo (Private)</p>
+                  <p>My Memo (Private) 🔐</p>
+                  {/* {memo.map(m => (
+                    <div key={m.id}>
+                      {m.content}
+                      <br />
+                      <span>{m.date}</span>
+                    </div>
+                  ))} */}
+
                   <textarea
                     className="card-box"
-                    placeholder="이 질문에 대한 개인 메모"
+                    placeholder={`이 게시물에 대한 개인의 생각이나 메모를 자유롭게 남겨보세요.\n(작성한 내용은 본인만 볼 수 있습니다)`}
                     disabled
+                  //value={memoText}
+                  //onChange={(e) => setMemoText(e.target.value)}
                   />
-                  <button>메모 저장</button>
+
+                  <button 
+                  // onClick={handleAddMemo}
+                  >
+                    메모 저장
+                  </button>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -337,4 +392,6 @@ function Detail() {
   );
 }
 
+
 export default Detail;
+
