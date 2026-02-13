@@ -16,17 +16,19 @@ export default function UserModal({ user, onClose, onDeleted }) {
   }, [onClose]);
 
   /* ===============================
-     🔥 영구 삭제
+     🔥 영구 비활성화 (삭제)
   =============================== */
   const handleDeactivate = async () => {
     const ok = window.confirm(
-      `${user.user_nickname} (${user.user_id}) 계정을 영구 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`
+      `${user.name} (${user.email}) 계정을 영구 비활성화 하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`
     );
     if (!ok) return;
 
     try {
+      console.log("삭제 대상 user:", user);
+
       await axios.delete(
-        `https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/admin/users/${user.user_no}`,
+        `https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/admin/users/${user.id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -34,8 +36,7 @@ export default function UserModal({ user, onClose, onDeleted }) {
         }
       );
 
-      // 부모(AdminUsers)에 삭제 완료 알림
-      onDeleted?.(user.user_no);
+      onDeleted?.(user.id);
       onClose();
     } catch (err) {
       console.error("회원 삭제 실패", err);
@@ -67,49 +68,74 @@ export default function UserModal({ user, onClose, onDeleted }) {
         <div className="user-modal__body">
           <div className="user-profile">
             <div className="user-profile__avatar">
-              {user.user_nickname?.slice(0, 1)}
+              {user.name.slice(0, 1)}
             </div>
 
             <div className="user-profile__info">
               <div className="user-profile__name-row">
-                <div className="user-profile__name">
-                  {user.user_nickname}
-                </div>
+                <div className="user-profile__name">{user.name}</div>
                 <span className="user-profile__status">
                   <span className="user-status-pill">
-                    {user.user_role}
+                    {user.status === "active" ? "활성" : user.status}
                   </span>
                 </span>
               </div>
 
-              <div className="user-profile__email">
-                ID: {user.user_id}
-              </div>
+              <div className="user-profile__email">{user.email}</div>
 
               <div className="user-profile__meta">
-                <span>가입: {user.create_datetime}</span>
-                <span>디자인 {user.designs}개</span>
-                <span>핀 {user.pins}개</span>
-                <span>댓글 {user.comments}개</span>
+                <span>가입: {user.joinDate}</span>
+                <span>마지막 활동: {user.lastActive}</span>
+                <span>활동 {user.activeDays}일</span>
               </div>
             </div>
           </div>
 
           <div className="user-divider" />
 
-          {/* admin actions */}
+          <div className="user-section-title">활동 통계</div>
+          <div className="user-stats">
+            <div className="user-stat-card">
+              <div className="user-stat-card__num">{user.designs}</div>
+              <div className="user-stat-card__label">업로드한 디자인</div>
+              <span className="user-stat-pill green">활발</span>
+            </div>
+            <div className="user-stat-card">
+              <div className="user-stat-card__num">{user.pins}</div>
+              <div className="user-stat-card__label">생성한 핀</div>
+            </div>
+            <div className="user-stat-card">
+              <div className="user-stat-card__num">{user.comments}</div>
+              <div className="user-stat-card__label">작성한 댓글</div>
+            </div>
+            <div className="user-stat-card">
+              <div className="user-stat-card__num">1.0</div>
+              <div className="user-stat-card__label">일평균 활동</div>
+            </div>
+          </div>
+
+          <div className="user-moderation">
+            <div className="user-moderation__title">⚠ 중재 정보</div>
+            <div className="user-moderation__row">
+              <div className="muted">신고한 횟수</div>
+              <div className="user-moderation__num">{user.reports}</div>
+            </div>
+          </div>
+
           <div className="user-section-title">관리자 액션</div>
           <div className="user-actions">
+            <button className="user-action-btn">🛡 경고 발송</button>
+            <button className="user-action-btn">⛔ 일시 정지</button>
+            <button className="user-action-btn">✉ 이메일 보내기</button>
             <button
               className="user-action-btn danger"
               onClick={handleDeactivate}
             >
-              🚫 영구 삭제
+              🚫 영구 비활성화
             </button>
           </div>
         </div>
 
-        {/* foot */}
         <div className="user-modal__foot">
           <button className="user-modal__foot-btn" onClick={onClose}>
             닫기
