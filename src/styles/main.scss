@@ -38,6 +38,7 @@ main {
   section {
     h2 {
       @include typo("displayMd", $bold);
+    color: $main_gray_800;
     }
 
     p {
