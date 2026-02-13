@@ -25,7 +25,7 @@ export default function UserModal({ user, onClose, onDeleted }) {
     if (!ok) return;
 
     try {
-      await axios.delete(`https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/admin/users/${user.id}`, {
+      await axios.delete(`https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app/api/admin/users/${user.id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
