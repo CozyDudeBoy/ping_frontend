@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import defaultPost from '../../assets/default_post.png';
 
 dayjs.locale('ko');
 dayjs.extend(utc);
@@ -177,27 +178,35 @@ function Detail() {
             <p>{post?.post_content}</p>
 
             <div className="img_box">
-              <div className="image_wrap">
-                {imageUrl && (
-                  <img
-                    src={`https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app${imageUrl}`}
-                    alt="상세 이미지"
-                  />
-                )}
+  <div className="image_wrap">
+    <img
+      src={
+        imageUrl
+          ? `https://port-0-ping-backend-mkvwe63p223f9070.sel3.cloudtype.app${imageUrl}`
+          : defaultPost
+      }
+      alt="상세 이미지"
+      onError={(e) => {
+        e.currentTarget.onerror = null;
+        e.currentTarget.src = defaultPost;
+      }}
+    />
 
-                {pins.map((pin, index) => (
-                  <div
-                    key={pin.pin_no}
-                    className={`pin_marker ${selectedPin?.pin_no === pin.pin_no ? 'active' : ''
-                      }`}
-                    style={{ left: `${pin.x}%`, top: `${pin.y}%` }}
-                    onClick={() => handlePinClick(pin)}
-                  >
-                    {index + 1}
-                  </div>
-                ))}
-              </div>
-            </div>
+    {pins.map((pin, index) => (
+      <div
+        key={pin.pin_no}
+        className={`pin_marker ${
+          selectedPin?.pin_no === pin.pin_no ? 'active' : ''
+        }`}
+        style={{ left: `${pin.x}%`, top: `${pin.y}%` }}
+        onClick={() => handlePinClick(pin)}
+      >
+        {index + 1}
+      </div>
+    ))}
+  </div>
+</div>
+
 
             {/* 모바일 영역 모달버튼 */}
             <button
