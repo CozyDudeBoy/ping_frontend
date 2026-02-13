@@ -1,5 +1,6 @@
 import eye from "../assets/icon-eye.svg";
 import comments from "../assets/icon-edit.svg";
+import defaultPost from "../assets/default_post.png"; // ✅ 추가
 import { Link } from "react-router-dom";
 
 // 날짜 포맷 함수
@@ -18,16 +19,20 @@ const formatDate = (dateString) => {
 export default function DesignItem({
   item,
   linkable = true,
-  onClick,          // ✅ 추가
+  onClick,
 }) {
   const content = (
     <article className="design-item">
       <div className="thumb-wrap" style={{ "--ratio": item.ratio }}>
         <img
           className="thumb"
-          src={item.image}
+          src={item.image || defaultPost}
           alt={item.title}
           loading="lazy"
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = defaultPost;
+          }}
         />
       </div>
 
@@ -56,7 +61,7 @@ export default function DesignItem({
     <Link
       to={`/detail/${item.id}`}
       className="design-item-link"
-      onClick={onClick}   // ✅ 클릭 훅
+      onClick={onClick}
     >
       {content}
     </Link>
